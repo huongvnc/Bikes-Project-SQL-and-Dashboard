@@ -1,114 +1,65 @@
 ![Dashboard review](images/dashboard_preview.png)
-# Sales & Inventory Dashboard
+# Bikes Sales Dashboard
 
-## 📊 Overview
+The dashboard includes important KPIs such as: total sales/revenue, total units sold, inventory quantity, top-selling products,...
 
-The **Sales & Inventory Dashboard** provides a clear and interactive overview of sales performance and inventory status. It helps users monitor key business metrics, identify sales trends, and understand inventory levels to support data-driven decision-making.
+This dashboard can be used to track sales performance over time[year/month/week]. User can also filter data by [Region, Product, Category, Date] to identify for example which products generate the most sales, which categories perform best, where are sales performing poorly, inventory quantity of the best sales product,...
 
-## 🎯 Objectives
 
-The main objectives of this dashboard are to:
+## Data Overview
 
-- Monitor overall sales performance
-- Track revenue and units sold
-- Analyze sales trends over time
-- Identify top-performing products
-- Monitor inventory levels
-- Identify products with low or high stock
-- Compare sales performance across different categories, regions, or other dimensions
-- Support better business and inventory decisions
+*Datasource: 
+`BikeStores Sample Database (2017)` provided by SQLServerTutorial.net*
 
-## 📌 Key Performance Indicators (KPIs)
+| Table | number of records | action
+|--------|-------------|-------------|
+| `categories` | 7 | |
+| `brands` | 9 |       
+| `stores` | 3 | create `DimStores` |
+| `customers` | 1445 | create `DimCustomer`|
+| `[products]` | 321 | create DimProduct joining products with `brands` table and `categories` table|
+| `[stock]` | 939|    | create `FactInventory` table |
+| `[staffs]` | 10|    | create `DimStaff` joining staffs with `stores` tables |
+| `[orders]` | 1600|    |
+| `[order_items]` | 4722| create `FactSales` table using `INNER JOIN` with `orders` and other `DimTables`, calculate `gross_sales`, `net_sales` after `discount` |
 
-The dashboard includes important KPIs such as:
+- I created `DimDate` ranging from 01/01/2016 - 28/12/2018 which is `min_date` and `max_date` from `[order_items]`
 
-- **Total Sales / Revenue**
-- **Total Units Sold**
-- **Number of Products**
-- **Inventory Quantity**
-- **Average Sales**
-- **Top-Selling Products**
-- **Low-Stock Products**
+*Data quality check:*
 
-## 📈 Dashboard Features
+- Only one staff is not assigned to a manager
+- After aggregating, the table is unchanged so the data was already aggregated
+- Every records are VALID by `JOINING` tables. For example I verified whether every order has a valid customer, every order item has a valid order, every order item has a valid product
+- In the customers database, the input are standardized. first_name and last_name have the first capital letter, phone numbers are standardized to the format (XXX) XXX-XXXX, and email addresses are converted to lowercase.
+- In the products database, product names are standardized to have the first letter of each word capitalized.
+- In the orders database, order dates are standardized to the format YYYY-MM-DD.
+- In the order_items database, list prices and discounts are standardized to two decimal places.
 
-### Sales Performance
-Provides an overview of sales results and trends, including:
+Overall, the database is well-organized and I do not need to transform the data itself.
 
-- Revenue trends
-- Units sold
-- Product performance
-- Category performance
-- Sales comparisons
+Then I tried some queries for example: Which products generate the highest gross and net sales using `GROUP BY` and `ORDER BY`, how does discount % impact sales ? using `CASE WHEN` to categorize discount_tier and calculate `gross_sales` and `net_sales`.
 
-### Inventory Overview
-Helps monitor stock availability and inventory conditions, including:
+The tables work well and ready for visualization.
 
-- Current inventory levels
-- Stock by product
-- Low-stock items
-- Inventory distribution
-- Products requiring attention
+## Star Schema
+ 
+![Star Schema relationship](images/star_schema.png)
 
-### Interactive Analysis
 
-Users can apply filters and slicers to explore the data by different dimensions, such as:
+## Measures
+Create `Total Orders`, `Total Quantity`, `Total Sales`, `Total Inventory`  using `DAX` functions `DISTINCTCOUNT`, `SUM`
 
-- Date
-- Product
-- Category
-- Region
-- Customer
-- Salesperson
+## Techniques and Charts
+- KPI, line chart, cluster bar chart, pie chart.
+- Filter, slicer
 
-## 🛠️ Tools Used
+## Key insights and action
+## Key insights and action
 
-- **Power BI** — Dashboard development and visualization
-- **Excel / CSV** — Data source and data preparation
-- **Power Query** — Data cleaning and transformation
-- **DAX** — Calculations and KPI measures
+| Insights | Action |
+|---|---|
+| Good sales performance in Quarter 1 and Quarter 2 of the Year, highest in April | high demand time, focus on marketing and operational planning |
+| 2018 has the lowest revenue | Check which drives to low sales (out of stock, pricing strategies, sales channel, competitors, alternative product) |
+| Mountain Bikes sales drops down dramatically in 2018 | Check which drives to low sales |
 
-## 📂 Dashboard Structure
-
-The dashboard is organized into the following sections:
-
-1. **Sales & Inventory Overview**
-2. **Sales Performance**
-3. **Inventory Analysis**
-4. **Product Performance**
-5. **Trend Analysis**
-
-## 🔍 Business Insights
-
-The dashboard can help answer questions such as:
-
-- What is the total revenue generated?
-- Which products generate the most sales?
-- Which categories perform best?
-- How are sales changing over time?
-- Which products have low inventory?
-- Which products may require restocking?
-- Where are sales performing strongly or poorly?
-
-## 👥 Target Users
-
-This dashboard is designed for:
-
-- Sales Managers
-- Inventory Managers
-- Business Analysts
-- Management Teams
-- Business Owners
-
-## 🚀 How to Use
-
-1. Open the dashboard.
-2. Review the main KPI cards for a quick performance summary.
-3. Use filters and slicers to select the required date, product, category, or region.
-4. Analyze the sales and inventory visualizations.
-5. Identify important trends and products requiring attention.
-6. Use the insights to support business and inventory decisions.
-
-## 📌 Conclusion
-
-The **Sales & Inventory Dashboard** brings sales and inventory information together in one interactive view. It transforms raw business data into meaningful insights, making it easier to monitor performance, identify trends, and make informed decisions.
+![Mountain Bike](images/mountain_bikes.png)
