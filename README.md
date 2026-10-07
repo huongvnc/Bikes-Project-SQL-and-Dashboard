@@ -53,8 +53,6 @@ Create `Total Orders`, `Total Quantity`, `Total Sales`, `Total Inventory`  using
 - KPI, line chart, cluster bar chart, pie chart.
 - Filter, slicer
 
-## Key insights and action
-## Key insights and action
 
 | Insights | Action |
 |---|---|
